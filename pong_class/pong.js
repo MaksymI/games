@@ -1,12 +1,9 @@
-class Vec
-{
-    constructor(x = 0, y = 0)
-    {
+class Vec {
+    constructor(x = 0, y = 0) {
         this.x = x;
         this.y = y;
     }
-    get len()
-    {
+    get len() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
     set len(value) {
@@ -16,61 +13,48 @@ class Vec
     }
 }
 
-class Rect
-{
-    constructor(x = 0, y = 0)
-    {
+class Rect {
+    constructor(x = 0, y = 0) {
         this.pos = new Vec(0, 0);
         this.size = new Vec(x, y);
     }
-    get left()
-    {
+    get left() {
         return this.pos.x - this.size.x / 2;
     }
-    get right()
-    {
+    get right() {
         return this.pos.x + this.size.x / 2;
     }
-    get top()
-    {
+    get top() {
         return this.pos.y - this.size.y / 2;
     }
-    get bottom()
-    {
+    get bottom() {
         return this.pos.y + this.size.y / 2;
     }
 }
 
-class Ball extends Rect
-{
-    constructor()
-    {
+class Ball extends Rect {
+    constructor() {
         super(10, 10);
         this.vel = new Vec;
     }
 }
 
-class Player extends Rect
-{
-    constructor()
-    {
+class Player extends Rect {
+    constructor() {
         super(20, 100);
         this.vel = new Vec;
         this.score = 0;
 
         this._lastPos = new Vec;
     }
-    update(dt)
-    {
+    update(dt) {
         this.vel.y = (this.pos.y - this._lastPos.y) / dt;
         this._lastPos.y = this.pos.y;
     }
 }
 
-class Pong
-{
-    constructor(canvas)
-    {
+class Pong {
+    constructor(canvas) {
         this._canvas = canvas;
         this._context = canvas.getContext('2d');
 
@@ -126,13 +110,11 @@ class Pong
 
         this.reset();
     }
-    clear()
-    {
+    clear() {
         this._context.fillStyle = '#000';
         this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
     }
-    collide(player, ball)
-    {
+    collide(player, ball) {
         if (player.left < ball.right && player.right > ball.left &&
             player.top < ball.bottom && player.bottom > ball.top) {
             ball.vel.x = -ball.vel.x * 1.05;
@@ -141,8 +123,7 @@ class Pong
             ball.vel.len = len;
         }
     }
-    draw()
-    {
+    draw() {
         this.clear();
 
         this.drawRect(this.ball);
@@ -150,13 +131,11 @@ class Pong
 
         this.drawScore();
     }
-    drawRect(rect)
-    {
+    drawRect(rect) {
         this._context.fillStyle = '#fff';
         this._context.fillRect(rect.left, rect.top, rect.size.x, rect.size.y);
     }
-    drawScore()
-    {
+    drawScore() {
         const align = this._canvas.width / 3;
         const cw = this.CHAR_PIXEL * 4;
         this.players.forEach((player, index) => {
@@ -167,8 +146,7 @@ class Pong
             });
         });
     }
-    play()
-    {
+    play() {
         const b = this.ball;
         if (b.vel.x === 0 && b.vel.y === 0) {
             b.vel.x = 200 * (Math.random() > .5 ? 1 : -1);
@@ -176,20 +154,17 @@ class Pong
             b.vel.len = this.initialSpeed;
         }
     }
-    reset()
-    {
+    reset() {
         const b = this.ball;
         b.vel.x = 0;
         b.vel.y = 0;
         b.pos.x = this._canvas.width / 2;
         b.pos.y = this._canvas.height / 2;
     }
-    start()
-    {
+    start() {
         requestAnimationFrame(this._frameCallback);
     }
-    update(dt)
-    {
+    update(dt) {
         const cvs = this._canvas;
         const ball = this.ball;
         ball.pos.x += ball.vel.x * dt;
